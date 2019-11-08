@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>計算機</title>
+    <style>
+    body{
+        background: rgb(58, 60, 137);
+    }
+    #calculator{
+        width:500px;
+        height:800px;
+        margin: auto;
+        background: rgb(5, 6, 26);
+        padding: 5px;
+        font-family: Arial;
+        border-radius: 10px;
+        box-shadow: 5px 5px 15px 1px #080808;
+    }
+    #showHeader{
+        width:calc(100% - 20px);
+        height:7%;
+        margin: 10px auto 0 auto;
+        font-size: 2em;
+        text-align: center;
+        font-weight: bolder;
+        font-family: Courier New;
+        color:#000000;
+        text-shadow: -1px -1px 0 rgb(216, 213, 45), 1px -1px 0 rgb(216, 213, 45), -1px 1px 0 rgb(216, 213, 45), 1px 1px 0 rgb(216, 213, 45);
+    }
+    #showNum{
+        width:calc(100% - 20px);
+        height:12%;
+        margin: 0 auto;
+        font-size: 5em;
+        text-align: right;
+        font-weight: bolder;
+        padding: 5px;
+        overflow:hidden;
+        box-sizing: border-box;
+        font-family: Arial, Helvetica, sans-serif;
+        color:rgb(167, 111, 84);
+        
+    }
+    #showFormula{
+        width:calc(100% - 20px);
+        height:5%;
+        margin: 0px auto;
+        font-size: 1.5em;
+        text-align: right;
+        padding: 5px;
+        overflow:hidden;
+        box-sizing: border-box;
+        color:#dbd6d6;
+    }
+    #calculator table{       
+        width:calc(100% - 20px);
+        height:calc(75% - 20px);
+        margin: auto;
+    }
+    table td{
+        text-align: center;
+        font-size: 3em;
+        /* background: rgb(175, 214, 69); */
+        cursor: pointer;
+        vertical-align: middle;
+        color:bisque;
+    }
+    table td:hover{
+        background-image: linear-gradient(to bottom right, rgb(19, 18, 50), rgb(39, 39, 91));
+    }
+    table td.one{
+        width:25%;
+        height:15%;
+    }
+    table td.rows{
+        width:25%;
+        height:30%;
+    }
+    table td.col{
+        width:50%;
+        height:15%;
+    }
+    .num{
+        background:rgb(19, 18, 50);
+    }
+    .formula{
+        background:rgb(36, 36, 74);
+    }
+    .cle{
+        background:rgb(39, 39, 91);
+    }
+    .equal{
+        background:rgb(59, 59, 121);
+    }
+    </style>
+    
+</head>
+<body>
+    <div id="calculator">
+        <div id="showHeader">Calculator</div>
+        <div id="showNum"></div>
+        <div id="showFormula"></div>
+        <table>
+            <tr>
+                <td class="one formula">+</td>
+                <td class="one formula">-</td>
+                <td class="one formula">*</td>
+                <td class="one formula">/</td>
+            </tr>
+            <tr>
+                <td class="one num">7</td>
+                <td class="one num">8</td>
+                <td class="one num">9</td>
+                <td class="one cle">c</td>
+            </tr>
+            <tr>
+                <td class="one num">4</td>
+                <td class="one num">5</td>
+                <td class="one num">6</td>
+                <td class="one cle">←</td>
+            </tr>
+            <tr>
+                <td class="one num">1</td>
+                <td class="one num">2</td>
+                <td class="one num">3</td>
+                <td class="rows equal" rowspan="2">=</td>
+            </tr>
+            <tr>
+                <td class="col num" colspan="2">0</td>
+                <td class="one num">.</td>
+            </tr>
+        </table>
+    </div>
+
+
+    <script>
+        let showNum=document.getElementById("showNum");
+        let showFormula=document.getElementById("showFormula");
+        let td=document.getElementsByTagName("td");
+        let operator = [".","+","-","*","/","=","c","Backspace","Enter"];
+        for (let i = 0; i < td.length; i++) {
+            td[i].onclick=()=>{
+                // console.log(td[i].innerText);
+                addkeyb(td[i].innerText);
+            }       
+        }
+        document.onkeydown=(event)=>{
+            let key=event.key;
+            if (!isNaN(key) || operator.includes(key)) {
+                addkeyb(key);
+            }
+        }
+
+        let addkeyb=(keyb)=>{
+            if (keyb == "c") {
+                showNum.innerText="";
+                showFormula.innerText="";
+            } else if(keyb == "←" || keyb == "Backspace") {   
+                showNum.innerText="";
+                showFormula.innerText=showFormula.innerText.substr(0,showFormula.innerText.length-1);
+            } else if(keyb == "=" || keyb == "Enter") {   
+                if (!isNaN(showFormula.innerText.substr(-1,1))) {
+                    showNum.innerText=eval(showFormula.innerText);
+                }    
+            } else if(keyb == ".") {  
+                if (showFormula.innerText.substr(-1,1)=="0" || showFormula.innerText.substr(-1,1)=="1" || showFormula.innerText.substr(-1,1)=="2" || showFormula.innerText.substr(-1,1)=="3" || showFormula.innerText.substr(-1,1)=="4" || showFormula.innerText.substr(-1,1)=="5" || showFormula.innerText.substr(-1,1)=="6" || showFormula.innerText.substr(-1,1)=="7" || showFormula.innerText.substr(-1,1)=="8" || showFormula.innerText.substr(-1,1)=="9") {
+                    showNum.innerText="";
+                    showFormula.innerText+=keyb;
+                }  
+            } else if(keyb == "+" || keyb == "-" || keyb == "*" || keyb == "/" ) {   
+                showNum.innerText="";
+                if (isNaN(showFormula.innerText.substr(-1,1))) {
+                    showFormula.innerText=showFormula.innerText.substr(0,showFormula.innerText.length-1)+keyb;
+                } else {
+                    showFormula.innerText+=keyb;
+                }  
+            } else {
+                showNum.innerText="";
+                if (showFormula.innerText=="" || showFormula.innerText=="0") {
+                    showFormula.innerText=keyb;
+                } else {
+                    showFormula.innerText+=keyb;
+                }  
+            }
+        }
+    
+    </script>
+   
+  
+</body>
+</html>
